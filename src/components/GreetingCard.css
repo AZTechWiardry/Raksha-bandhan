@@ -1,0 +1,48 @@
+.card-fullscreen {
+  min-height: 100vh;
+  background: linear-gradient(to right, #ffe4e1, #fff8f0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+}
+
+.letter-box {
+  width: 100%;
+  max-width: 700px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-left: 8px solid #d6336c;
+  white-space: pre-wrap;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #444;
+  box-sizing: border-box;
+}
+
+.typed-message {
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  border-right: 2px solid #d6336c;
+  animation: blink 0.8s infinite;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+@keyframes blink {
+  0%   { border-color: #d6336c; }
+  50%  { border-color: transparent; }
+  100% { border-color: #d6336c; }
+}
+
+@media (max-width: 600px) {
+  .letter-box {
+    padding: 20px;
+    font-size: 1rem;
+    border-left: 5px solid #d6336c;
+  }
+}
