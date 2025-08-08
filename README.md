@@ -32,7 +32,8 @@ A beautiful and interactive greeting web page for Raksha Bandhan, featuring:
 
 ## 🚀 Live Demo
 
-[🌐 View it on GitHub Pages]([https://your-username.github.io/your-repo-name](https://aztechwiardry.github.io/Raksha-bandhan/))
+🔗 [Click here to view the Raksha Bandhan Greeting Website](https://aztechwiardry.github.io/Raksha-bandhan/)
+
 ---
 
 ## 📁 Folder Structure
