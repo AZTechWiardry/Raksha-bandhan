@@ -32,7 +32,7 @@ A beautiful and interactive greeting web page for Raksha Bandhan, featuring:
 
 ## 🚀 Live Demo
 
-[🌐 View it on GitHub Pages](https://your-username.github.io/your-repo-name)
+[🌐 View it on GitHub Pages]([https://your-username.github.io/your-repo-name](https://aztechwiardry.github.io/Raksha-bandhan/))
 
 > ⚠️ Replace the link above with your actual deployed link
 
