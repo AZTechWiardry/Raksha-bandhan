@@ -6,21 +6,13 @@
   <title>Raksha Bandhan Greeting</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @keyframes float {
-      0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+    @keyframes floatDown {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
     .float {
-      animation: float 10s linear infinite;
+      animation: floatDown 10s linear infinite;
     }
     canvas {
       position: fixed;
@@ -29,31 +21,42 @@
       z-index: 1;
       pointer-events: none;
     }
+    #cursor {
+      display: inline-block;
+      width: 1px;
+      background: black;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center overflow-hidden relative bg-gradient-to-br from-pink-100 via-yellow-50 to-purple-100">
-
-  <!-- Optional Soft Overlay -->
-  <div class="absolute inset-0 bg-white/30 backdrop-blur-sm z-0"></div>
+<body class="bg-gradient-to-br from-yellow-100 via-pink-100 to-purple-100 min-h-screen flex flex-col items-center justify-center overflow-hidden relative">
 
   <!-- Fireworks -->
   <canvas id="fireworks"></canvas>
 
+  <!-- Start Button -->
+  <button id="startBtn" class="z-20 bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full shadow-lg font-bold text-lg transition duration-300">
+    Start Greeting
+  </button>
+
   <!-- Greeting Card -->
-  <div class="bg-white/90 rounded-xl shadow-xl p-4 sm:p-6 max-w-sm sm:max-w-xl z-10 mx-4 backdrop-blur-md text-center">
-    <button id="startBtn" class="bg-pink-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-pink-700 transition duration-300 mb-4">
-      please click to start
-    </button>
-    <pre id="message" class="text-gray-800 text-sm sm:text-base font-mono whitespace-pre-wrap text-left hidden"></pre>
+  <div id="greetingCard" class="hidden bg-white/90 rounded-xl shadow-xl p-4 sm:p-6 max-w-sm sm:max-w-xl z-10 mx-4 backdrop-blur-md mt-4">
+    <pre id="message" class="text-gray-800 text-sm sm:text-base font-mono whitespace-pre-wrap p-4 border border-gray-300 rounded-md shadow-inner bg-white/80 leading-relaxed"></pre>
+    <p class="mt-4 text-right text-xs text-gray-600 italic">— Made by Aditya Zingade</p>
   </div>
 
   <!-- Background Music -->
-  <audio id="bgMusic" loop>
+  <audio id="bgAudio" loop>
     <source src="rakhi-music.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
-  <!-- JavaScript -->
+  <!-- Scripts -->
   <script>
     const message = `
 Dear Sister,
@@ -72,11 +75,52 @@ Your Brother ❤️
 
     const messageElement = document.getElementById("message");
     const startBtn = document.getElementById("startBtn");
-    const music = document.getElementById("bgMusic");
+    const greetingCard = document.getElementById("greetingCard");
+    const audio = document.getElementById("bgAudio");
+
+    startBtn.addEventListener("click", () => {
+      // Start audio
+      audio.play().catch(err => console.log("Autoplay blocked"));
+
+      // Show greeting
+      greetingCard.classList.remove("hidden");
+
+      // Hide button
+      startBtn.style.display = "none";
+
+      // Typing animation
+      let index = 0;
+      const cursor = document.createElement("span");
+      cursor.id = "cursor";
+      messageElement.appendChild(cursor);
+
+      function typeMessage() {
+        if (index < message.length) {
+          messageElement.insertBefore(document.createTextNode(message.charAt(index)), cursor);
+          index++;
+          setTimeout(typeMessage, Math.random() * (70 - 30) + 30);
+        } else {
+          cursor.remove();
+        }
+      }
+      typeMessage();
+
+      // Floating flowers
+      for (let i = 0; i < 15; i++) {
+        const flower = document.createElement("img");
+        flower.src = "./flower.png"; // Replace with your flower PNG path
+        flower.className = "absolute pointer-events-none float";
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.top = "-50px";
+        flower.style.width = flower.style.height = Math.random() * 30 + 20 + "px";
+        flower.style.animationDelay = (Math.random() * 10) + "s";
+        document.body.appendChild(flower);
+      }
+    });
+
+    // Fireworks animation
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
-    let fireworks = [];
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -85,30 +129,7 @@ Your Brother ❤️
       canvas.height = window.innerHeight;
     });
 
-    function typeMessage() {
-      let index = 0;
-      function type() {
-        if (index < message.length) {
-          messageElement.textContent += message.charAt(index);
-          index++;
-          setTimeout(type, 50);
-        }
-      }
-      type();
-    }
-
-    function createFlowers() {
-      for (let i = 0; i < 15; i++) {
-        const flower = document.createElement("img");
-        flower.src = "./flower.png"; // Replace with your flower image path
-        flower.className = "absolute pointer-events-none float";
-        flower.style.left = Math.random() * 100 + "vw";
-        flower.style.top = "-50px"; // Start above the screen
-        flower.style.width = flower.style.height = Math.random() * 30 + 20 + "px";
-        flower.style.animationDelay = (Math.random() * 10) + "s";
-        document.body.appendChild(flower);
-      }
-    }
+    let fireworks = [];
 
     function Firework() {
       this.x = Math.random() * canvas.width;
@@ -143,16 +164,7 @@ Your Brother ❤️
       requestAnimationFrame(animateFireworks);
     }
 
-    startBtn.addEventListener("click", () => {
-  startBtn.remove(); // permanently remove button
-  messageElement.classList.remove("hidden");
-  typeMessage();
-  createFlowers();
-  animateFireworks();
-  music.play().catch(err => console.warn("Playback error:", err));
-});
-
+    animateFireworks();
   </script>
-
 </body>
 </html>
