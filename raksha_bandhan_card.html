@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raksha Bandhan Greeting Card</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(to right, #ffe6e6, #fff5f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .card {
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .message {
+      font-size: 18px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="message" id="message"></div>
+  </div>
+  <audio autoplay loop>
+    <source src="rakhi-music.mp3" type="mp3">
+  </audio>
+  <script>
+    const message = `
+Dear Sister,
+
+On this special occasion of Raksha Bandhan,
+I want you to know how much you mean to me.
+Your love, care, and presence make life beautiful.
+
+Wishing you joy, success, and all the happiness in the world.
+
+Happy Raksha Bandhan!
+
+With love,
+Your Brother ❤️
+    `;
+
+    const messageElement = document.getElementById("message");
+    let index = 0;
+
+    function type() {
+      if (index < message.length) {
+        messageElement.textContent += message.charAt(index);
+        index++;
+        setTimeout(type, 100); // Adjust typing speed here
+      }
+    }
+
+    window.onload = type;
+  </script>
+</body>
+</html>
