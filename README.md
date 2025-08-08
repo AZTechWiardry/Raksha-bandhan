@@ -33,18 +33,19 @@ A beautiful and interactive greeting web page for Raksha Bandhan, featuring:
 ## 🚀 Live Demo
 
 [🌐 View it on GitHub Pages]([https://your-username.github.io/your-repo-name](https://aztechwiardry.github.io/Raksha-bandhan/))
-
-> ⚠️ Replace the link above with your actual deployed link
-
 ---
 
 ## 📁 Folder Structure
 
 /raksha-bandhan-greeting/
+
 │
 ├── index.html
+
 ├── flower.png # Flower image used in the animation
+
 ├── rakhi-music.mp3 # Background instrumental audio
+
 ├── README.md
 
 ## 👨‍💻 Author
