@@ -7,9 +7,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
     .float {
       animation: float 10s linear infinite;
@@ -23,37 +31,29 @@
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-pink-200 via-yellow-100 to-purple-200 min-h-screen flex items-center justify-center overflow-hidden relative">
+<body class="min-h-screen flex items-center justify-center overflow-hidden relative bg-gradient-to-br from-pink-100 via-yellow-50 to-purple-100">
+
+  <!-- Optional Soft Overlay -->
+  <div class="absolute inset-0 bg-white/30 backdrop-blur-sm z-0"></div>
 
   <!-- Fireworks -->
   <canvas id="fireworks"></canvas>
 
-  <!-- Floating Flowers -->
-  <script>
-    for (let i = 0; i < 15; i++) {
-      const flower = document.createElement("img");
-      flower.src = "./flower.png"; // You can replace with your flower PNG URL
-      flower.className = "absolute pointer-events-none float";
-      flower.style.left = Math.random() * 100 + "vw";
-      flower.style.top = "100vh";
-      flower.style.width = flower.style.height = Math.random() * 30 + 20 + "px";
-      flower.style.animationDelay = (Math.random() * 10) + "s";
-      document.body.appendChild(flower);
-    }
-  </script>
-
   <!-- Greeting Card -->
-  <div class="bg-white/90 rounded-xl shadow-xl p-4 sm:p-6 max-w-sm sm:max-w-xl z-10 mx-4 backdrop-blur-md">
-    <pre id="message" class="text-gray-800 text-sm sm:text-base font-mono whitespace-pre-wrap"></pre>
+  <div class="bg-white/90 rounded-xl shadow-xl p-4 sm:p-6 max-w-sm sm:max-w-xl z-10 mx-4 backdrop-blur-md text-center">
+    <button id="startBtn" class="bg-pink-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-pink-700 transition duration-300 mb-4">
+      please click to start
+    </button>
+    <pre id="message" class="text-gray-800 text-sm sm:text-base font-mono whitespace-pre-wrap text-left hidden"></pre>
   </div>
 
   <!-- Background Music -->
-  <audio autoplay loop>
+  <audio id="bgMusic" loop>
     <source src="rakhi-music.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
-  <!-- Typing Animation -->
+  <!-- JavaScript -->
   <script>
     const message = `
 Dear Sister,
@@ -69,22 +69,14 @@ Happy Raksha Bandhan!
 With love,
 Your Brother ❤️
     `;
-    const messageElement = document.getElementById("message");
-    let index = 0;
-    function type() {
-      if (index < message.length) {
-        messageElement.textContent += message.charAt(index);
-        index++;
-        setTimeout(type, 50);
-      }
-    }
-    window.onload = type;
-  </script>
 
-  <!-- Fireworks Animation -->
-  <script>
+    const messageElement = document.getElementById("message");
+    const startBtn = document.getElementById("startBtn");
+    const music = document.getElementById("bgMusic");
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
+    let fireworks = [];
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -93,7 +85,30 @@ Your Brother ❤️
       canvas.height = window.innerHeight;
     });
 
-    let fireworks = [];
+    function typeMessage() {
+      let index = 0;
+      function type() {
+        if (index < message.length) {
+          messageElement.textContent += message.charAt(index);
+          index++;
+          setTimeout(type, 50);
+        }
+      }
+      type();
+    }
+
+    function createFlowers() {
+      for (let i = 0; i < 15; i++) {
+        const flower = document.createElement("img");
+        flower.src = "./flower.png"; // Replace with your flower image path
+        flower.className = "absolute pointer-events-none float";
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.top = "-50px"; // Start above the screen
+        flower.style.width = flower.style.height = Math.random() * 30 + 20 + "px";
+        flower.style.animationDelay = (Math.random() * 10) + "s";
+        document.body.appendChild(flower);
+      }
+    }
 
     function Firework() {
       this.x = Math.random() * canvas.width;
@@ -128,7 +143,15 @@ Your Brother ❤️
       requestAnimationFrame(animateFireworks);
     }
 
-    animateFireworks();
+    startBtn.addEventListener("click", () => {
+  startBtn.remove(); // permanently remove button
+  messageElement.classList.remove("hidden");
+  typeMessage();
+  createFlowers();
+  animateFireworks();
+  music.play().catch(err => console.warn("Playback error:", err));
+});
+
   </script>
 
 </body>
